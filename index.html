@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syafiqah Sazali | Student Bento Grid Landing Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 1. Global Styles and Font */
+        :root {
+            --color-background: #F8F9FA;    /* Light Grey/Off-White */
+            --color-card-bg: #FFFFFF;       /* White */
+            --color-text-primary: #212529;  /* Dark Grey */
+            --color-text-secondary: #6C757D;/* Medium Grey */
+            --color-accent: #004d99;        /* Deep Ocean Blue Accent (Updated) */
+            --border-radius: 12px;
+            --padding-card: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* 2. Bento Grid Layout */
+        .bento-grid-container {
+            width: 100%;
+            max-width: 1200px; 
+            display: grid;
+            gap: 15px; 
+            
+            /* Default: Mobile Layout (Stacked Vertically) */
+            grid-template-columns: 1fr;
+            grid-auto-rows: minmax(120px, auto);
+        }
+
+        /* 3. Card Styles */
+        .card {
+            background-color: var(--color-card-bg);
+            border-radius: var(--border-radius);
+            padding: var(--padding-card);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text-primary);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 5px;
+        }
+
+        .card-content {
+            font-size: 0.95em;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        /* Specific Card Styles */
+        .card-profile h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+            color: var(--color-accent);
+        }
+        .card-profile p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .tagline {
+            font-style: italic;
+            font-size: 1.1em;
+            margin-top: -5px;
+            margin-bottom: 20px !important;
+            color: var(--color-text-secondary);
+        }
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: auto; /* Push links to the bottom */
+        }
+        .social-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .social-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .card-location {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .card-location .campus {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--color-accent);
+        }
+        .card-location .time {
+            font-size: 1.2em;
+            margin-top: 5px;
+            color: var(--color-text-primary);
+        }
+
+        .card-tech-stack ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .card-tech-stack li {
+            background-color: var(--color-background);
+            padding: 5px 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            font-weight: 600;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .card-case-study h3 {
+            color: var(--color-accent);
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        .card-hobby .activity {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            text-align: center;
+            margin-top: 10px;
+        }
+        .card-hobby {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-playlist {
+            text-align: center;
+        }
+        .music-player-placeholder {
+            background-color: var(--color-background);
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 15px;
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        /* 4. Desktop Layout (Bento Grid) */
+        @media (min-width: 768px) {
+            .bento-grid-container {
+                grid-template-columns: repeat(6, 1fr);
+                grid-auto-rows: 220px; 
+            }
+
+            /* Card 1 (Profile): Large box (4x2) */
+            .card-profile {
+                grid-column: span 4;
+                grid-row: span 2;
+            }
+
+            /* Card 2 (Location): Small box (2x1) */
+            .card-location {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+
+            /* Card 3 (Tech Stack): Medium box (2x1) */
+            .card-tech-stack {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+
+            /* Card 4 (Case Study): Medium box (2x1) */
+            .card-case-study {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+
+            /* Card 5 (Hobby): Small box (2x1) */
+            .card-hobby {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+
+            /* Card 6 (Playlist): Wide box at the bottom (6x1) */
+            .card-playlist {
+                grid-column: 1 / -1; 
+                grid-row: auto; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bento-grid-container">
+
+        <div class="card card-profile">
+            <h1>Syafiqah Sazali</h1>
+            <p><strong>Program:</strong> Food Technology | <strong>Year:</strong> Year 1</p>
+            <p class="tagline">'Innovating food safety.'</p>
+            <div class="card-content">
+                <p>Welcome to my academic hub. I am focused on applying scientific principles to improve food production, quality control, and preservation techniques.</p>
+            </div>
+            <div class="social-links">
+                <a href="#" target="_blank">LinkedIn</a>
+                <a href="#" target="_blank">GitHub</a>
+                <a href="#" target="_blank" style="color: var(--color-accent);">UMT Portal</a>
+            </div>
+        </div>
+
+        <div class="card card-location">
+            <div class="campus">UMT, Kuala Nerus</div>
+            <div class="time">2:30 PM, Sunday, 14 December 2025</div>
+        </div>
+
+        <div class="card card-tech-stack">
+            <div class="card-title">📚 Core Modules & Skills</div>
+            <div class="card-content">
+                <ul>
+                    <li>Food Chemistry</li>
+                    <li>Microbiology</li>
+                    <li>Advanced Excel (Data Mgt)</li>
+                    <li>Basic Lab Analysis</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card card-case-study">
+            <div class="card-title">🧪 Recent Lab Study</div>
+            <div class="card-content">
+                <h3>Starch Gelatinization in Local Kuih</h3>
+                <p>Analyzing the thermal and texture profiles of **Kuih Lapis** during cooking to understand the role of different flours and starch stabilizers.</p>
+            </div>
+        </div>
+
+        <div class="card card-hobby">
+            <div class="card-title">🌊 Personal Time</div>
+            <div class="activity">Evening walks at Pantai UMT</div>
+        </div>
+
+        <div class="card card-playlist">
+            <div class="card-title">🎧 Focus Playlist</div>
+            <div class="music-player-placeholder">
+                [Placeholder for Spotify/YouTube Music Embed]<br>
+                **Now Playing:** 'Instrumental Jazz for Deep Work'
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
