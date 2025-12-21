@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Timer | Research Assistant</title>
+    <style>
+        /* CSS - Scientific Blue Aesthetic */
+        :root {
+            --bg-color: #e3f2fd; /* Scientific Blue */
+            --card-bg: #ffffff;
+            --primary-accent: #1976d2;
+            --secondary-accent: #cfd8dc;
+            --text-color: #263238;
+            --button-hover: #bbdefb;
+            --danger: #d32f2f;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 380px;
+            border: 2px solid #bbdefb;
+        }
+
+        #lab-display {
+            font-size: 6rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* Scientific Pulse Animation */
+        .analyzing {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        #timer-display {
+            font-size: 3.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            margin: 5px 0;
+            color: var(--primary-accent);
+        }
+
+        .status-text {
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #546e7a;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 2px dashed var(--secondary-accent);
+            padding-bottom: 20px;
+        }
+
+        /* Checklist Styles */
+        .checklist-section {
+            text-align: left;
+        }
+
+        .checklist-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid var(--secondary-accent);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        #task-list {
+            list-style: none;
+            padding: 0;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .task-item {
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .task-item:hover {
+            background: #eceff1;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        /* Button Styles */
+        button {
+            background-color: var(--secondary-accent);
+            border: 1px solid #b0bec5;
+            padding: 8px 14px;
+            border-radius: 6px;
+            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+
+        button:hover {
+            background-color: var(--button-hover);
+        }
+
+        #start-btn { 
+            background-color: var(--primary-accent); 
+            color: white;
+            border: none;
+        }
+
+        .clear-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 0.7rem;
+            padding: 0;
+            text-decoration: underline;
+        }
+
+        .clear-btn:hover {
+            background: none;
+            color: #b71c1c;
+        }
+
+        .add-btn {
+            background-color: var(--primary-accent);
+            color: white;
+            border: none;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <a href="https://S80269.github.io" style="position:absolute; top:20px; left:20px; text-decoration: none; color: var(--primary-accent); font-weight: bold;">← Portfolio</a>
+
+    <div class="container">
+        <div id="lab-display">🧪</div>
+        <div class="status-text" id="status-label">System Ready</div>
+        <div id="timer-display">15:00</div>
+
+        <div class="controls">
+            <button id="start-btn" onclick="startTimer()">Begin</button>
+            <button id="pause-btn" onclick="pauseTimer()">Pause</button>
+            <button id="reset-btn" onclick="resetTimer()">Reset</button>
+        </div>
+
+        <div class="checklist-section">
+            <div class="checklist-title">
+                LAB CHECKLIST 📋
+                <button class="clear-btn" onclick="clearTasks()">Clear All</button>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="task-input" placeholder="Enter protocol step...">
+                <button class="add-btn" onclick="addTask()">Add</button>
+            </div>
+
+            <ul id="task-list"></ul>
+        </div>
+    </div>
+
+    <audio id="alarm-sound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
+
+    <script>
+        /* --- Timer Logic --- */
+        let timeLeft = 15 * 60;
+        let timerInterval = null;
+        
+        const labDisplay = document.getElementById('lab-display');
+        const timerDisplay = document.getElementById('timer-display');
+        const statusLabel = document.getElementById('status-label');
+        const alarmSound = document.getElementById('alarm-sound');
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (timerInterval) return;
+            labDisplay.textContent = '🔬';
+            labDisplay.classList.add('analyzing');
+            statusLabel.textContent = 'Analyzing Sample...';
+            timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    finishTimer();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            labDisplay.classList.remove('analyzing');
+            statusLabel.textContent = 'Analysis Suspended';
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timeLeft = 15 * 60;
+            labDisplay.textContent = '🧪';
+            labDisplay.classList.remove('analyzing');
+            statusLabel.textContent = 'System Ready';
+            updateDisplay();
+        }
+
+        function finishTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            labDisplay.textContent = '✅';
+            labDisplay.classList.remove('analyzing');
+            statusLabel.textContent = 'Process Complete';
+            alarmSound.play();
+            alert("Lab process complete.");
+        }
+
+        /* --- Checklist Logic --- */
+        const taskInput = document.getElementById('task-input');
+        const taskList = document.getElementById('task-list');
+
+        // Load tasks on startup
+        document.addEventListener('DOMContentLoaded', loadTasks);
+
+        function addTask() {
+            const text = taskInput.value.trim();
+            if (text === "") return;
+
+            const task = { text, completed: false };
+            saveTaskToLocal(task);
+            renderTask(task);
+            taskInput.value = "";
+        }
+
+        function renderTask(task) {
+            const li = document.createElement('li');
+            li.className = `task-item ${task.completed ? 'completed' : ''}`;
+            li.textContent = task.text;
+            li.onclick = () => {
+                li.classList.toggle('completed');
+                updateTaskStatusLocal(task.text);
+            };
+            taskList.appendChild(li);
+        }
+
+        function saveTaskToLocal(task) {
+            let tasks = JSON.parse(localStorage.getItem('labTasks')) || [];
+            tasks.push(task);
+            localStorage.setItem('labTasks', JSON.stringify(tasks));
+        }
+
+        function loadTasks() {
+            let tasks = JSON.parse(localStorage.getItem('labTasks')) || [];
+            tasks.forEach(renderTask);
+        }
+
+        function updateTaskStatusLocal(taskText) {
+            let tasks = JSON.parse(localStorage.getItem('labTasks')) || [];
+            tasks = tasks.map(t => t.text === taskText ? { ...t, completed: !t.completed } : t);
+            localStorage.setItem('labTasks', JSON.stringify(tasks));
+        }
+
+        function clearTasks() {
+            if(confirm("Clear all protocol steps?")) {
+                localStorage.removeItem('labTasks');
+                taskList.innerHTML = "";
+            }
+        }
+
+        // Allow 'Enter' key to add task
+        taskInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") addTask();
+        });
+
+        updateDisplay();
+    </script>
+</body>
+</html>
