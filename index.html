@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +15,7 @@
             --color-accent: #004d99;        /* Deep Ocean Blue Accent */
             --border-radius: 12px;
             --padding-card: 20px;
+            --color-button-hover: #003366;
         }
 
         * {
@@ -55,9 +55,8 @@
             transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease; 
             display: flex;
             flex-direction: column;
-            /* Ensure text is readable over background images */
             position: relative; 
-            overflow: hidden; /* Important for clean corners with background image */
+            overflow: hidden; 
         }
 
         .card:hover {
@@ -81,35 +80,25 @@
             flex-grow: 1;
         }
 
-        /* Specific Card Styles */
-        
-        /* Profile Card Background Image Setup - NEW STYLES HERE */
+        /* Profile Card Background Image Setup */
         .card-profile {
-            /* 1. Set the background image URL */
             background-image: url('bg.jpg'); 
-            /* 2. Control how the image is displayed */
-            background-size: cover; /* Ensures the image covers the entire card */
-            background-position: center bottom; /* Centers the image and anchors to the bottom */
-            background-repeat: no-repeat; /* Prevents tiling */
-            
-            /* Optional: Improve text readability over a potentially complex image */
-            background-color: rgba(255, 255, 255, 0.7); /* Adds a light overlay if image is dark */
-            background-blend-mode: lighten; /* Blends the image with the light color */
+            background-size: cover; 
+            background-position: center bottom; 
+            background-repeat: no-repeat; 
+            background-color: rgba(255, 255, 255, 0.7); 
+            background-blend-mode: lighten; 
         }
 
-        /* Ensure text in the profile card is clear */
         .card-profile h1, .card-profile p, .card-profile .tagline, .card-profile .card-content, .social-links a {
-            position: relative; /* Brings text above the background */
-            z-index: 2; /* Ensures content stacks above the image */
-            color: var(--color-text-primary); /* Default text color */
+            position: relative; 
+            z-index: 2; 
+            color: var(--color-text-primary); 
         }
 
-        /* Adjust colors for contrast if the background image is light/white */
         .card-profile h1 {
             color: var(--color-accent);
         }
-        
-        /* End Profile Card Image Setup */
         
         .card-profile p {
             font-size: 1.1em;
@@ -164,13 +153,41 @@
             margin-bottom: 8px;
             border-radius: 5px;
             font-weight: 600;
-            border-left: 3px solid var(--color-accent);
+            border-left: 3px solid var(--accent-color, var(--color-accent));
         }
 
+        /* Case Study Layout with Button */
         .card-case-study h3 {
             color: var(--color-accent);
             font-size: 1.2em;
             margin-bottom: 8px;
+        }
+
+        .case-study-flex {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 100%;
+        }
+
+        .btn-timer {
+            display: inline-block;
+            background-color: var(--color-accent);
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 77, 153, 0.2);
+            margin-top: 10px;
+        }
+
+        .btn-timer:hover {
+            background-color: var(--color-button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 77, 153, 0.3);
         }
 
         .card-hobby, .card-reflection {
@@ -189,7 +206,6 @@
             font-style: italic;
             color: var(--color-text-primary);
         }
-
 
         .card-playlist {
             text-align: center;
@@ -213,10 +229,23 @@
             .card-profile { grid-column: span 4; grid-row: span 2; }
             .card-location { grid-column: span 2; grid-row: span 1; }
             .card-tech-stack { grid-column: span 2; grid-row: span 1; }
-            .card-case-study { grid-column: span 2; grid-row: span 1; }
-            .card-hobby { grid-column: span 2; grid-row: span 1; }
-            .card-reflection { grid-column: span 2; grid-row: span 1; }
+            .card-case-study { grid-column: span 4; grid-row: span 1; } /* Expanded to span 4 to show side-by-side content */
+            .card-hobby { grid-column: span 1; grid-row: span 1; }
+            .card-reflection { grid-column: span 1; grid-row: span 1; }
             .card-playlist { grid-column: 1 / -1; grid-row: auto; }
+
+            .case-study-flex {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .case-study-text {
+                flex: 1;
+                padding-right: 20px;
+            }
+            .case-study-action {
+                flex-shrink: 0;
+            }
         }
     </style>
 </head>
@@ -244,7 +273,7 @@
         </div>
 
         <div class="card card-tech-stack">
-            <div class="card-title">📚 Core Modules & Skills</div>
+            <div class="card-title">🔬 Core Modules & Skills</div>
             <div class="card-content">
                 <ul>
                     <li>Food Chemistry</li>
@@ -258,27 +287,34 @@
         <div class="card card-case-study">
             <div class="card-title">🧪 Recent Lab Study</div>
             <div class="card-content">
-                <h3>Starch Gelatinization in Local Kuih</h3>
-                <p>Analyzing the thermal and texture profiles of **Kuih Lapis** during cooking to understand the role of different flours and starch stabilizers.</p>
+                <div class="case-study-flex">
+                    <div class="case-study-text">
+                        <h3>Starch Gelatinization in Local Kuih</h3>
+                        <p>Analyzing the thermal and texture profiles of **Kuih Lapis** during cooking to understand the role of starch stabilizers.</p>
+                    </div>
+                    <div class="case-study-action">
+                        <a href="[PASTE YOUR APP URL HERE]" class="btn-timer" target="_blank">Try My Lab Timer App</a>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="card card-hobby">
             <div class="card-title">🌊 Personal Time</div>
-            <div class="activity">Evening walks at Pantai UMT</div>
+            <div class="activity">Beach Walks</div>
         </div>
 
         <div class="card card-reflection">
-            <div class="card-title">💡 Why Food Tech Matters in Malaysia</div>
+            <div class="card-title">🌱 Future</div>
             <div class="card-content reflection-text">
-                <p>Sustainable food security is crucial for our future. By optimizing local processing methods, we can reduce waste and improve nutrition.</p>
+                <p>Sustainable food security for Malaysia.</p>
             </div>
         </div>
 
         <div class="card card-playlist">
-            <div class="card-title">🎧 Focus Playlist</div>
+            <div class="card-title">🎵 Focus Playlist</div>
             <div class="music-player-placeholder">
-                [<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/53iuhJlwXhSER5J2IYYv1W?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>]<br>
+                <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DWZeKzbUnY3Ym" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe><br>
                 **Now Playing:** 'Instrumental Jazz for Deep Work'
             </div>
         </div>
